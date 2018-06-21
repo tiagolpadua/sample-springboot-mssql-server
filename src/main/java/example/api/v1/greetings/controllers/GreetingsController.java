@@ -18,8 +18,6 @@ public class GreetingsController {
 
     // http://localhost:8080/api/v1/greetings
     // http://localhost:8080/api/v1/greetings?name=foo
-//    @RequestMapping(value = "/v1/greetings", method= RequestMethod.GET, produces = "application/json")
-//    @RequestMapping("/v1/greetings")
     @RequestMapping(value = "/v1/greetings", method= RequestMethod.GET)
     public ServiceResponse<Greeting> greeting(@RequestParam(value="name", defaultValue="World") String name) {
         return new ServiceResponse<Greeting>(new Greeting(counter.incrementAndGet(),
