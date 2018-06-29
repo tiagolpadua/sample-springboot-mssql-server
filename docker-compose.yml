@@ -9,6 +9,7 @@ services:
       - 1433:1433
     volumes:
       - sqlserver:/var/opt/mssql  
+  
   microservice:
     ports:
       - 8080:8080
@@ -16,6 +17,8 @@ services:
       context: .
       args:
         JAR_FILE: target/sample-springboot-mssql-server-0.0.1-SNAPSHOT.jar
+    depends_on:
+      - db
     links:
       - db
       

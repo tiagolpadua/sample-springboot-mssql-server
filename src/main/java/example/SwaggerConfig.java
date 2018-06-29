@@ -14,9 +14,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 // https://springfox.github.io/springfox/docs/current/
 // https://springframework.guru/spring-boot-restful-api-documentation-with-swagger-2/
-	
-// http://localhost:8080/api/v2/api-docs
-// http://localhost:8080/api/swagger-ui.html
 
 @Configuration
 @EnableSwagger2

@@ -1,4 +1,4 @@
-package example.api.v1.books.entities;
+package example.api.v1.books;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -65,4 +65,9 @@ public class Book {
 		this.description = description;
 	}
 
+	@Override
+	public String toString() {
+		return "Book [id=" + id + ", title=" + title + ", author=" + author + ", description=" + description + "]";
+	}
+	
 }
