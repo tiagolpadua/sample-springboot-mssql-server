@@ -5,6 +5,7 @@
 ```bash
 $ docker-compose up db
 $ sqlcmd -S localhost -U SA -P 'Admin123!'
+$ sqlcmd -S 127.0.0.1 -U SA -P 'Admin123!'
 ```
 Sempre terminar os comandos com ```GO```;
 
@@ -18,8 +19,12 @@ INSERT INTO Inventory VALUES (1, 'banana', 150); INSERT INTO Inventory VALUES (2
 SELECT * FROM Inventory WHERE quantity > 152;
 QUIT
 
+CREATE DATABASE springbootdb
+GO
 USE springbootdb
+GO
 SELECT TABLE_NAME FROM springbootdb.INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'
+GO
 
 ```
 

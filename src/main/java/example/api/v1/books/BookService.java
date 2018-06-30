@@ -6,7 +6,10 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+
+import example.api.infra.SampleEntityNotFoundException;
 
 @Service
 public class BookService {
@@ -24,14 +27,27 @@ public class BookService {
 		return bookRepository.save(book);
 	}
 
-	public Optional<Book> getBook(Long id) {
+	public Book getBook(Long id) {
 		log.debug("Getting book: " + id);
-		return bookRepository.findById(id);
+		Optional<Book> book = bookRepository.findById(id);
+		if (book.isPresent()) {
+			return book.get();
+		} else {
+			throw new SampleEntityNotFoundException("Book not found: " + id);
+		}
 	}
 
-	public void updateBook(Book book) {
-		log.debug("Updateing book: " + book.toString());
-		bookRepository.save(book);
+	public Book updateBook(Book book) {
+		log.debug("Updating book: " + book.toString());
+
+		Optional<Book> existingBook = bookRepository.findById(book.getId());
+
+		if (existingBook.isPresent()) {
+			return bookRepository.save(book);
+		} else {
+			throw new SampleEntityNotFoundException("Book not found: " + book.getId());
+		}
+
 	}
 
 	public List<Book> getAllBooks() {
@@ -39,17 +55,10 @@ public class BookService {
 	}
 
 	public void deleteBook(Long id) {
-		bookRepository.deleteById(id);
+		try {
+			bookRepository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			throw new SampleEntityNotFoundException("Book not found: " + id);
+		}
 	}
-
-	// http://goo.gl/7fxvVf
-	// public Page<Book> getAllBooks(Integer page, Integer size) {
-	// Page pageOfBooks = BookRepository.findAll(new PageRequest(page, size));
-	// // example of adding to the /metrics
-	// if (size > 50) {
-	// counterService.increment("Khoubyari.BookService.getAll.largePayload");
-	// }
-	// return pageOfBooks;
-	// }
-
 }

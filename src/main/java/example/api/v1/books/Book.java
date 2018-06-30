@@ -1,10 +1,11 @@
 package example.api.v1.books;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Book {
@@ -13,15 +14,22 @@ public class Book {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Column(name = "title", nullable = false)
+	// @Column(name = "title", nullable = false)
+	@NotNull
+	@Size(min = 5, message = "Title should have at least 5 characters")
 	private String title;
 
-	@Column(name = "author", nullable = false)
+	// @Column(name = "author", nullable = false)
+	@NotNull
+	@Size(min = 2, message = "Author should have atleast 2 characters")
 	private String author;
 
-	@Column(name = "description", nullable = true)
+	// @Column(name = "description", nullable = true)
+	@NotNull
+	@Size(min = 10, message = "Description should have at least 10 characters")
+	@Size(max = 20, message = "Description should have at max 20 characters")
 	private String description;
-	
+
 	public Book() {
 	}
 
@@ -69,5 +77,5 @@ public class Book {
 	public String toString() {
 		return "Book [id=" + id + ", title=" + title + ", author=" + author + ", description=" + description + "]";
 	}
-	
+
 }

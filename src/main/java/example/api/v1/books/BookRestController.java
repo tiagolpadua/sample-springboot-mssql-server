@@ -2,7 +2,8 @@ package example.api.v1.books;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -30,7 +31,7 @@ public class BookRestController {
 	private BookService bookService;
 
 	@PostMapping
-	public ResponseEntity<ServiceResponse<Book>> createBook(@RequestBody Book book) {
+	public ResponseEntity<ServiceResponse<Book>> createBook(@RequestBody @Valid Book book) {
 		book = bookService.createBook(book);
 
 		HttpHeaders headers = new HttpHeaders();
@@ -39,66 +40,44 @@ public class BookRestController {
 				.toUri();
 		headers.setLocation(location);
 
-		ServiceMessage message = new ServiceMessage("Livro cadastrado com sucesso!");
+		ServiceMessage message = new ServiceMessage("Book successfuly created!");
 
-		return new ResponseEntity<ServiceResponse<Book>>(new ServiceResponse<Book>(book, message), headers,
+		return new ResponseEntity<>(new ServiceResponse<>(book, message), headers,
 				HttpStatus.CREATED);
 	}
 
 	// http://localhost:8080/api/v1/books/1
 	@GetMapping("/{id}")
 	public ResponseEntity<ServiceResponse<Book>> getBook(@PathVariable Long id) {
-		Optional<Book> book = bookService.getBook(id);
-
-		if (book.isPresent()) {
-			return ResponseEntity.ok(new ServiceResponse<Book>(book.get()));
-		} else {
-			return new ResponseEntity<ServiceResponse<Book>>(
-					new ServiceResponse<Book>(null, new ServiceMessage(MessageType.ERROR, "Livro não encontrado")),
-					HttpStatus.NOT_FOUND);
-		}
+		return ResponseEntity.ok(new ServiceResponse<>(bookService.getBook(id)));
 	}
 
 	// http://localhost:8080/api/v1/books
 	@GetMapping
 	public ServiceResponse<List<Book>> listBooks() {
-		return new ServiceResponse<List<Book>>(bookService.getAllBooks());
+		return new ServiceResponse<>(bookService.getAllBooks());
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<ServiceResponse<Book>> updateBook(@PathVariable Long id, @RequestBody Book book) {
-
-		// Valida se o ID passado é igual ao do Livro informado
+	public ResponseEntity<ServiceResponse<Book>> updateBook(@PathVariable Long id, @Valid @RequestBody Book book) {
 		if (book.getId() != id) {
-			return new ResponseEntity<ServiceResponse<Book>>(new ServiceResponse<Book>(null,
-					new ServiceMessage(MessageType.ERROR, "ID da URL não corresponde ao ID do livro informado.")),
+			return new ResponseEntity<ServiceResponse<Book>>(
+					new ServiceResponse<>(null, new ServiceMessage(MessageType.ERROR, "URL ID doesn't match book ID.")),
 					HttpStatus.BAD_REQUEST);
 		}
 
-		Optional<Book> currentBook = bookService.getBook(id);
+		ServiceMessage message = new ServiceMessage("Book successfuly updated!");
 
-		if (!currentBook.isPresent()) {
-			return new ResponseEntity<ServiceResponse<Book>>(
-					new ServiceResponse<Book>(null, new ServiceMessage(MessageType.ERROR, "Livro não encontrado")),
-					HttpStatus.NOT_FOUND);
-		}
+		return new ResponseEntity<ServiceResponse<Book>>(new ServiceResponse<>(bookService.updateBook(book), message),
+				HttpStatus.OK);
 
-		ServiceMessage message = new ServiceMessage("Livro alterado com sucesso!");
-
-		bookService.updateBook(book);
-
-		return new ResponseEntity<ServiceResponse<Book>>(
-				new ServiceResponse<Book>(bookService.getBook(id).get(), message), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ServiceResponse<Void>> deleteBook(@PathVariable Long id) {
-
 		bookService.deleteBook(id);
-
-		ServiceMessage message = new ServiceMessage("Livro excluído com sucesso!");
-
-		return new ResponseEntity<ServiceResponse<Void>>(new ServiceResponse<Void>(null, message), HttpStatus.OK);
+		ServiceMessage message = new ServiceMessage("Book sucessfully deleted!");
+		return new ResponseEntity<>(new ServiceResponse<>(message), HttpStatus.OK);
 	}
 
 }
