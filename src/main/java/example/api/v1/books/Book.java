@@ -27,7 +27,7 @@ public class Book {
 	// @Column(name = "description", nullable = true)
 	@NotNull
 	@Size(min = 10, message = "Description should have at least 10 characters")
-	@Size(max = 20, message = "Description should have at max 20 characters")
+	@Size(max = 200, message = "Description should have at max 20 characters")
 	private String description;
 
 	public Book() {
