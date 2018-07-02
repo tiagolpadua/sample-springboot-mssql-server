@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MvcResult;
 
 import example.Application;
 import example.BaseTestRestController;
@@ -50,7 +52,7 @@ public class BookRestControllerTest extends BaseTestRestController {
 		this.mockMvc.perform(post("/v1/books").contentType(contentType).content(validBookJson))
 				.andExpect(status().isCreated());
 	}
-	
+
 	@Test
 	public void createAInvalidBook() throws Exception {
 		String invalidBookJson = json(new Book(null, "Jou", "Jules Verne",
@@ -82,41 +84,56 @@ public class BookRestControllerTest extends BaseTestRestController {
 	public void getAnInexistingBook() throws Exception {
 		mockMvc.perform(get("/v1/books/" + (book.getId() + 1))).andExpect(status().isNotFound());
 	}
-	
+
 	@Test
 	public void updateValidBook() throws Exception {
 		String validBookJson = json(new Book(book.getId(), "Journey to the Center of the Earth", "Jules Verne",
 				"Journey to the Center of the Earth is an 1864 science fiction novel by Jules Verne."));
-		
+
 		this.mockMvc.perform(put("/v1/books/" + book.getId()).contentType(contentType).content(validBookJson))
-		.andExpect(status().isOk());
+				.andExpect(status().isOk());
+		// .andReturn();
+		// System.out.println("-------------------");
+		// System.out.println(resp.getResponse().getContentAsString());
+		// System.out.println("-------------------");
+
 	}
-	
+
 	@Test
 	public void updateValidBookAndInvalidID() throws Exception {
 		String validBookJson = json(new Book(book.getId() + 1, "Journey to the Center of the Earth", "Jules Verne",
 				"Journey to the Center of the Earth is an 1864 science fiction novel by Jules Verne."));
-		
+
 		this.mockMvc.perform(put("/v1/books/" + book.getId() + 1).contentType(contentType).content(validBookJson))
-		.andExpect(status().is4xxClientError());
+				.andExpect(status().is4xxClientError());
 	}
-	
+
 	@Test
 	public void updateValidBookAndNonMatchingID() throws Exception {
 		String validBookJson = json(new Book(book.getId(), "Journey to the Center of the Earth", "Jules Verne",
 				"Journey to the Center of the Earth is an 1864 science fiction novel by Jules Verne."));
-		
-		this.mockMvc.perform(put("/v1/books/" + book.getId() + 1).contentType(contentType).content(validBookJson))
-		.andExpect(status().is4xxClientError());
+
+		this.mockMvc.perform(put("/v1/books/" + (book.getId() + 1)).contentType(contentType).content(validBookJson))
+				.andExpect(status().is4xxClientError());
 	}
-	
+
 	@Test
 	public void updateInvalidBook() throws Exception {
 		String validBookJson = json(new Book(book.getId(), "Jou", "Jules Verne",
 				"Journey to the Center of the Earth is an 1864 science fiction novel by Jules Verne."));
-		
+
 		this.mockMvc.perform(put("/v1/books/" + book.getId()).contentType(contentType).content(validBookJson))
-		.andExpect(status().is4xxClientError());
+				.andExpect(status().is4xxClientError());
+	}
+
+	@Test
+	public void deleteExistingBook() throws Exception {
+		this.mockMvc.perform(delete("/v1/books/" + book.getId())).andExpect(status().isOk());
+	}
+
+	@Test
+	public void deleteNonExistingBook() throws Exception {
+		this.mockMvc.perform(delete("/v1/books/" + (book.getId() + 1))).andExpect(status().isNotFound());
 	}
 
 }

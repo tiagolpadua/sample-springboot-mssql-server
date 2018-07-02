@@ -42,8 +42,7 @@ public class BookRestController {
 
 		ServiceMessage message = new ServiceMessage("Book successfuly created!");
 
-		return new ResponseEntity<>(new ServiceResponse<>(book, message), headers,
-				HttpStatus.CREATED);
+		return new ResponseEntity<>(new ServiceResponse<>(book, message), headers, HttpStatus.CREATED);
 	}
 
 	// http://localhost:8080/api/v1/books/1
@@ -60,9 +59,11 @@ public class BookRestController {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<ServiceResponse<Book>> updateBook(@PathVariable Long id, @Valid @RequestBody Book book) {
-		if (book.getId() != id) {
+		if (!book.getId().equals(id)) {
 			return new ResponseEntity<ServiceResponse<Book>>(
-					new ServiceResponse<>(null, new ServiceMessage(MessageType.ERROR, "URL ID doesn't match book ID.")),
+					new ServiceResponse<>(null,
+							new ServiceMessage(MessageType.ERROR,
+									"URL ID: '" + id + "'doesn't match book ID: '" + book.getId() + "'.")),
 					HttpStatus.BAD_REQUEST);
 		}
 
