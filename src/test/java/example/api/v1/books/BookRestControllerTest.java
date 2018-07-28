@@ -48,7 +48,7 @@ public class BookRestControllerTest extends BaseTestRestController {
     String validBookJson = json(new Book(null, "Journey to the Center of the Earth", "Jules Verne",
         "Journey to the Center of the Earth is an 1864 science fiction novel by Jules Verne."));
 
-    this.mockMvc.perform(post("/v1/books").contentType(contentType).content(validBookJson))
+    this.mockMvc.perform(post("/api/v1/books").contentType(contentType).content(validBookJson))
         .andExpect(status().isCreated());
   }
 
@@ -57,13 +57,13 @@ public class BookRestControllerTest extends BaseTestRestController {
     String invalidBookJson = json(new Book(null, "Jou", "Jules Verne",
         "Journey to the Center of the Earth is an 1864 science fiction novel by Jules Verne."));
 
-    this.mockMvc.perform(post("/v1/books").contentType(contentType).content(invalidBookJson))
+    this.mockMvc.perform(post("/api/v1/books").contentType(contentType).content(invalidBookJson))
         .andExpect(status().is4xxClientError());
   }
 
   @Test
   public void getAllBooks() throws Exception {
-    mockMvc.perform(get("/v1/books")).andExpect(status().isOk())
+    mockMvc.perform(get("/api/v1/books")).andExpect(status().isOk())
         .andExpect(content().contentType(contentType)).andExpect(jsonPath("$.data", hasSize(1)))
         .andExpect(jsonPath("$.data[0].id", greaterThan(0)))
         .andExpect(jsonPath("$.data[0].title", is(book.getTitle())))
@@ -73,7 +73,7 @@ public class BookRestControllerTest extends BaseTestRestController {
 
   @Test
   public void getAnExistingBook() throws Exception {
-    mockMvc.perform(get("/v1/books/" + book.getId())).andExpect(status().isOk())
+    mockMvc.perform(get("/api/v1/books/" + book.getId())).andExpect(status().isOk())
         .andExpect(content().contentType(contentType))
         .andExpect(jsonPath("$.data.id", greaterThan(0)))
         .andExpect(jsonPath("$.data.title", is(book.getTitle())))
@@ -83,7 +83,7 @@ public class BookRestControllerTest extends BaseTestRestController {
 
   @Test
   public void getAnInexistingBook() throws Exception {
-    mockMvc.perform(get("/v1/books/" + (book.getId() + 1))).andExpect(status().isNotFound());
+    mockMvc.perform(get("/api/v1/books/" + (book.getId() + 1))).andExpect(status().isNotFound());
   }
 
   @Test
@@ -93,7 +93,7 @@ public class BookRestControllerTest extends BaseTestRestController {
             "Journey to the Center of the Earth is an 1864 science fiction novel by Jules Verne."));
 
     this.mockMvc
-        .perform(put("/v1/books/" + book.getId()).contentType(contentType).content(validBookJson))
+        .perform(put("/api/v1/books/" + book.getId()).contentType(contentType).content(validBookJson))
         .andExpect(status().isOk());
     // .andReturn();
     // System.out.println("-------------------");
@@ -110,7 +110,7 @@ public class BookRestControllerTest extends BaseTestRestController {
 
     this.mockMvc
         .perform(
-            put("/v1/books/" + book.getId() + 1).contentType(contentType).content(validBookJson))
+            put("/api/v1/books/" + book.getId() + 1).contentType(contentType).content(validBookJson))
         .andExpect(status().is4xxClientError());
   }
 
@@ -122,7 +122,7 @@ public class BookRestControllerTest extends BaseTestRestController {
 
     this.mockMvc
         .perform(
-            put("/v1/books/" + (book.getId() + 1)).contentType(contentType).content(validBookJson))
+            put("/api/v1/books/" + (book.getId() + 1)).contentType(contentType).content(validBookJson))
         .andExpect(status().is4xxClientError());
   }
 
@@ -132,18 +132,18 @@ public class BookRestControllerTest extends BaseTestRestController {
         "Journey to the Center of the Earth is an 1864 science fiction novel by Jules Verne."));
 
     this.mockMvc
-        .perform(put("/v1/books/" + book.getId()).contentType(contentType).content(validBookJson))
+        .perform(put("/api/v1/books/" + book.getId()).contentType(contentType).content(validBookJson))
         .andExpect(status().is4xxClientError());
   }
 
   @Test
   public void deleteExistingBook() throws Exception {
-    this.mockMvc.perform(delete("/v1/books/" + book.getId())).andExpect(status().isOk());
+    this.mockMvc.perform(delete("/api/v1/books/" + book.getId())).andExpect(status().isOk());
   }
 
   @Test
   public void deleteNonExistingBook() throws Exception {
-    this.mockMvc.perform(delete("/v1/books/" + (book.getId() + 1)))
+    this.mockMvc.perform(delete("/api/v1/books/" + (book.getId() + 1)))
         .andExpect(status().isNotFound());
   }
 
