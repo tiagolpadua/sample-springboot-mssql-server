@@ -21,7 +21,7 @@ import example.api.infra.ServiceMessage;
 import example.api.infra.ServiceResponse;
 
 @RestController
-@RequestMapping("/v1/books")
+@RequestMapping("/api/v1/books")
 public class BookRestController {
 
   @Autowired

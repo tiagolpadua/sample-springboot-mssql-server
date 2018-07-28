@@ -38,7 +38,8 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
         .addResourceLocations("classpath:/META-INF/resources/webjars/");
 
   }
-  
+
+  // TODO: Remover necessidade do trecho abaixo
   @Override
   public void addViewControllers(ViewControllerRegistry registry) {
     registry.addRedirectViewController("/", "index.html");
