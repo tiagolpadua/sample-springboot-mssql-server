@@ -10,72 +10,72 @@ import javax.validation.constraints.Size;
 @Entity
 public class Book {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 
-	// @Column(name = "title", nullable = false)
-	@NotNull
-	@Size(min = 5, message = "Title should have at least 5 characters")
-	private String title;
+  // @Column(name = "title", nullable = false)
+  @NotNull
+  @Size(min = 5, message = "Title should have at least 5 characters")
+  private String title;
 
-	// @Column(name = "author", nullable = false)
-	@NotNull
-	@Size(min = 2, message = "Author should have atleast 2 characters")
-	private String author;
+  // @Column(name = "author", nullable = false)
+  @NotNull
+  @Size(min = 2, message = "Author should have atleast 2 characters")
+  private String author;
 
-	// @Column(name = "description", nullable = true)
-	@NotNull
-	@Size(min = 10, message = "Description should have at least 10 characters")
-	@Size(max = 200, message = "Description should have at max 20 characters")
-	private String description;
+  // @Column(name = "description", nullable = true)
+  @NotNull
+  @Size(min = 10, message = "Description should have at least 10 characters")
+  @Size(max = 200, message = "Description should have at max 20 characters")
+  private String description;
 
-	public Book() {
-	}
+  public Book() {}
 
-	public Book(Long id, String title, String author, String description) {
-		super();
-		this.id = id;
-		this.title = title;
-		this.author = author;
-		this.description = description;
-	}
+  public Book(Long id, String title, String author, String description) {
+    super();
+    this.id = id;
+    this.title = title;
+    this.author = author;
+    this.description = description;
+  }
 
-	public Long getId() {
-		return id;
-	}
+  public Long getId() {
+    return id;
+  }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-	public String getTitle() {
-		return title;
-	}
+  public String getTitle() {
+    return title;
+  }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-	public String getAuthor() {
-		return author;
-	}
+  public String getAuthor() {
+    return author;
+  }
 
-	public void setAuthor(String author) {
-		this.author = author;
-	}
+  public void setAuthor(String author) {
+    this.author = author;
+  }
 
-	public String getDescription() {
-		return description;
-	}
+  public String getDescription() {
+    return description;
+  }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-	@Override
-	public String toString() {
-		return "Book [id=" + id + ", title=" + title + ", author=" + author + ", description=" + description + "]";
-	}
+  @Override
+  public String toString() {
+    return "Book [id=" + id + ", title=" + title + ", author=" + author + ", description="
+        + description + "]";
+  }
 
 }
