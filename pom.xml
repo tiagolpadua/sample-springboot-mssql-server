@@ -46,10 +46,10 @@
 		</dependency>
 		
 		<!-- https://spring.io/guides/gs/securing-web -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.springframework.boot</groupId> -->
-<!-- 			<artifactId>spring-boot-starter-security</artifactId> -->
-<!-- 		</dependency> -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
 
 		<!-- https://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-devtools.html -->
 		<dependency>

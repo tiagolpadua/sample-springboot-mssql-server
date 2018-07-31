@@ -16,17 +16,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+            // https://stackoverflow.com/questions/19468209/spring-security-403-error
+            .csrf().disable()
             .authorizeRequests()
                 // FIXME: Permite acesso irrestrito a todas URLs 
                 .antMatchers("/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-            .formLogin()
-                .loginPage("/login")
-                .permitAll()
-                .and()
-            .logout()
-                .permitAll();
+                .anyRequest().permitAll();
+//                .anyRequest().authenticated()
+//                .and()
+//            .formLogin()
+//                .loginPage("/login")
+//                .permitAll()
+//                .and()
+//            .logout()
+//                .permitAll();
     }
 
     @Bean
