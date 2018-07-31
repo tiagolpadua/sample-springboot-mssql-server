@@ -19,15 +19,20 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import example.api.infra.MessageType;
 import example.api.infra.ServiceMessage;
 import example.api.infra.ServiceResponse;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/api/v1/books")
+@Api(value = "Livros")
 public class BookRestController {
 
   @Autowired
   private BookService bookService;
 
   @PostMapping
+  @ApiOperation(value = "Cria um livro", notes = "Os dados do livro devem ser informados",
+      response = Book.class)
   public ResponseEntity<ServiceResponse<Book>> createBook(@RequestBody @Valid Book book) {
     book = bookService.createBook(book);
 
@@ -43,6 +48,8 @@ public class BookRestController {
   }
 
   // http://localhost:8080/api/v1/books/1
+  @ApiOperation(value = "Detalha um livro pelo ID", notes = "Um ID válido deve ser informado",
+      response = Book.class)
   @GetMapping("/{id}")
   public ResponseEntity<ServiceResponse<Book>> getBook(@PathVariable Long id) {
     return ResponseEntity.ok(new ServiceResponse<>(bookService.getBook(id)));
@@ -50,11 +57,14 @@ public class BookRestController {
 
   // http://localhost:8080/api/v1/books
   @GetMapping
+  @ApiOperation(value = "Lista os livros existentes", response = Book.class)
   public ServiceResponse<List<Book>> listBooks() {
     return new ServiceResponse<>(bookService.getAllBooks());
   }
 
   @PutMapping("/{id}")
+  @ApiOperation(value = "Altera os dados do livro informado",
+      notes = "Um ID válido deve ser informado", response = Book.class)
   public ResponseEntity<ServiceResponse<Book>> updateBook(@PathVariable Long id,
       @Valid @RequestBody Book book) {
     if (!book.getId().equals(id)) {
@@ -73,6 +83,8 @@ public class BookRestController {
   }
 
   @DeleteMapping("/{id}")
+  @ApiOperation(value = "Apaga um livro pelo ID", notes = "Um ID válido deve ser informado",
+      response = Book.class)
   public ResponseEntity<ServiceResponse<Void>> deleteBook(@PathVariable Long id) {
     bookService.deleteBook(id);
     ServiceMessage message = new ServiceMessage("Book sucessfully deleted!");

@@ -29,5 +29,5 @@ GO
 ```
 
 ## Swagger
-JSON: http://localhost:8080/api/v2/api-docs
-WEB-UI: http://localhost:8080/api/swagger-ui.html
+JSON: http://localhost:8080/v2/api-docs
+WEB-UI: http://localhost:8080/swagger-ui.html
